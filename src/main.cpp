@@ -10,7 +10,6 @@
 #include <random>
 #include <chrono>
 #include <ctime>
-#include <queue>
 using namespace std;
 int get_random(int low, int high) {
     random_device rd;
@@ -57,15 +56,8 @@ public:
     bool StrongSearch(nodo*&,nodo*&,int);
     bool InsertThread(int);
     bool DeleteThread(int);
-    bool PutOnGarbage(nodo*&);
     ~LE();
 };
-template<class T>
-bool LE<T>::PutOnGarbage(nodo*& basura)
-{
-    recolector_basura.push(basura);
-    return 1;
-}
 template<class T>
 LE<T>::LE()
 {
