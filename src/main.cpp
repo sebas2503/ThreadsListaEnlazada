@@ -69,8 +69,8 @@ bool LE<T>::PutOnGarbage(nodo*& basura)
 template<class T>
 LE<T>::LE()
 {
-    head = new nodo(INT_MIN);
-    tail = new nodo(INT_MAX);
+    head = new nodo(-2147483648);
+    tail = new nodo(2147483647);
     head->next  = tail;
 }
 template <class T>
