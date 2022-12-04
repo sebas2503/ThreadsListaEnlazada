@@ -31,7 +31,7 @@ class nodo
 public:
     int valor;
     nodo* next;
-    recursive_mutex candado;
+    mutex candado;
     nodo(int v, nodo* n = nullptr)
     {
         valor = v;
@@ -95,7 +95,7 @@ bool LE<T>::WeakSearch(nodo*& padre,nodo*& hijo,int valor)
     padre = head;
     hijo = padre->next;
     //hijo != tail &&
-    while (hijo->valor < valor)
+    while (hijo && hijo->valor < valor)
     {
         padre = hijo;
         hijo = padre->next;
@@ -109,7 +109,7 @@ bool LE<T>::StrongSearch(nodo*&padre,nodo*&hijo,int valor)
     padre->candado.lock();
     hijo = padre->next;
     //hijo != tail && (hijo->valor < valor && padre->valor < valor)
-    while (hijo->valor <valor)
+    while (hijo && hijo->valor <valor)
     {
         padre->candado.unlock();
         padre = hijo;
@@ -125,7 +125,7 @@ bool LE<T>::InsertThread(int valor)
     nodo*hijo;
     nodo* aux;
     StrongSearch(padre,hijo,valor);
-    if (hijo->valor == valor)
+    if (hijo && hijo->valor == valor)
     {
         hijo->valor = valor;
     }
@@ -144,14 +144,14 @@ bool LE<T>::DeleteThread(int valor)
     nodo* padre;
     nodo* hijo;
     StrongSearch(padre,hijo,valor);
-    if(hijo->valor == valor)
+    if(hijo && hijo->valor == valor)
     {
         hijo->candado.lock();
         padre->next = hijo->next;
         hijo->next = padre;
         hijo->candado.unlock();
-        PutOnGarbage(hijo);
-        //delete hijo;
+        //PutOnGarbage(hijo);
+        delete hijo;
     }
     padre->candado.unlock();
     return 1;
@@ -259,11 +259,11 @@ int main(int argc, const char* argv[])
     thread* mythread[5];
     unsigned t0, t1;
     t0=clock();
-    mythread[0] = new thread(Add<ascendente>(1,100, &lista),10);
-    mythread[1] = new thread(Add<ascendente>(1,100,&lista),10);
-    mythread[2] = new thread(Add<ascendente>(1,100, &lista),10);
-    mythread[3] = new thread(Delete<ascendente>(1,100,&lista),40);
-    mythread[4] = new thread(Delete<ascendente>(1,100,&lista),40);
+    mythread[0] = new thread(Add<ascendente>(1,20000,&lista),6666);
+    mythread[1] = new thread(Add<ascendente>(1,20000,&lista),6666);
+    mythread[2] = new thread(Add<ascendente>(1,20000,&lista),6667);
+    mythread[3] = new thread(Delete<ascendente>(1,20000,&lista),3000);
+    mythread[4] = new thread(Delete<ascendente>(1,20000,&lista),3000);
     mythread[0]->join();
     mythread[1]->join();
     mythread[2]->join();
