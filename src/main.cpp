@@ -248,19 +248,13 @@ struct Delete
 int main(int argc, const char* argv[])
 {
     LE<ascendente> lista;
-    thread* mythread[5];
+    thread* mythread[2];
     unsigned t0, t1;
     t0=clock();
-    mythread[0] = new thread(Add<ascendente>(1,20000,&lista),6666);
-    mythread[1] = new thread(Add<ascendente>(1,20000,&lista),6666);
-    mythread[2] = new thread(Add<ascendente>(1,20000,&lista),6667);
-    mythread[3] = new thread(Delete<ascendente>(1,20000,&lista),3000);
-    mythread[4] = new thread(Delete<ascendente>(1,20000,&lista),3000);
+    mythread[0] = new thread(Add<ascendente>(1,10000,&lista),5000);
+    mythread[1] = new thread(Delete<ascendente>(1,10000,&lista),200);
     mythread[0]->join();
     mythread[1]->join();
-    mythread[2]->join();
-    mythread[3]->join();
-    mythread[4]->join();
     lista.print();
     t1 = clock();
     double time = (double(t1-t0)/CLOCKS_PER_SEC);
