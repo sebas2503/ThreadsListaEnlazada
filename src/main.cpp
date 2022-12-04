@@ -43,7 +43,6 @@ class LE
 {
     nodo* head;
     nodo* tail;
-    queue<nodo*> recolector_basura;
 public:
     LE();
     void print();
